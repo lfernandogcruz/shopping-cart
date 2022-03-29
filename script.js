@@ -24,20 +24,69 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
-function getSkuFromProductItem(item) {
-  return item.querySelector('span.item__sku').innerText;
-}
+// abaixo comentado pro lint nao chorar
+// function getSkuFromProductItem(item) {
+//   return item.querySelector('span.item__sku').innerText;
+// }
 
-function cartItemClickListener(event) {
-  // coloque seu código aqui
-}
+// abaixo comentado pro lint nao chorar
+// function cartItemClickListener(event) {
+//   // coloque seu código aqui
+// }
 
-function createCartItemElement({ sku, name, salePrice }) {
-  const li = document.createElement('li');
-  li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-  li.addEventListener('click', cartItemClickListener);
-  return li;
-}
+// abaixo comentado pro lint nao chorar
+// function createCartItemElement({ sku, name, salePrice }) {
+//   const li = document.createElement('li');
+//   li.className = 'cart__item';
+//   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+//   li.addEventListener('click', cartItemClickListener);
+//   return li;
+// }
 
-window.onload = () => { };
+// abaixo comentado pro lint nao chorar
+// function emptyCart(event) {
+//   const clearButton = document.querySelector('.empty-cart');
+//   clearButton.addEventListener('click', () => {
+//     const cart = document.querySelector('.cart__items');
+//     while (cart.firstChild) {
+//       cart.removeChild(cart.firstChild);
+//     }
+//   }); 
+// } // ref#1
+
+async function printProds() {
+  const prodCanvas = document.querySelector('.items');
+  const prodObjs = await fetchProducts();
+  prodObjs.forEach((elProduct) => {
+    const prodsToPrint = {
+      sku: elProduct.id,
+      name: elProduct.title,
+      image: elProduct.thumbnail,
+    };
+    prodCanvas.appendChild(createProductItemElement(prodsToPrint));
+  });
+}
+printProds();
+
+window.onload = () => {};
+
+// :: REFERÊNCIAS UTILIZADAS ::
+// .
+// . Para evitar poluir o corpo do código, listo abaixo as referências que
+// . foram indexadas ao final das funções às quais se referem.
+// . . p.e.: 'ref#1' comentado no código se refere ao índice '1' listado abaixo.
+// . . NOTA: Os índices são numerados por ordem de consulta/implementação,
+// . . . e não por ordem de leitura ou execução.
+// .
+// . índice:
+// . . 1 - function emptyCart (requisito 6);
+// .
+// .
+// :: Lista de Referências:
+// .
+// . 1 - solução usando laço 'while' encontrado na documentação de '.removeChild',
+// . . . no 4o exemplo sob o título 'Removendo todos os nós filhos de um elemento'.
+// . . . consultei também documentação própria do método 'while'.
+// . . . Seguem os links:
+// . . . https://developer.mozilla.org/pt-BR/docs/Web/API/Node/removeChild
+// . . . https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Statements/while
