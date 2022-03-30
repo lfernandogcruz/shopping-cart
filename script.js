@@ -24,18 +24,36 @@ function createProductItemElement({ sku, name, image }) {
   return section;
 }
 
-// abaixo comentado pro lint nao chorar
 function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
-// abaixo comentado pro lint nao chorar
+const cart = document.querySelector('.cart__items');
+
+function printCartTotal() {
+  const cartElements = cart.childNodes;
+  const arrPrices = [];
+  cartElements.forEach((elElCart) => {
+    const elElEl = elElCart.innerHTML;
+    const priceElement = elElEl.substring(elElEl.indexOf('$') + 1, elElEl.length);
+    arrPrices.push(Number(priceElement));
+  });
+  const priceDiv = document.querySelector('.total-price');
+  console.log(arrPrices);
+  if (arrPrices.length > 0) {
+    const sumPrices = arrPrices.reduce((a, b) => a + b, 0);
+    priceDiv.innerHTML = `Total do carrinho: R$ ${sumPrices}`;
+    console.log(sumPrices);
+  }
+  priceDiv.innerHTML = 'Total do carrinho: CARRINHO VAZIO!';
+} // ref#2
+
 function cartItemClickListener(event) {
   // coloque seu código aqui
   event.target.remove();
+  printCartTotal();
 }
 
-// abaixo comentado pro lint nao chorar
 function createCartItemElement({ sku, name, salePrice }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
@@ -44,13 +62,11 @@ function createCartItemElement({ sku, name, salePrice }) {
   return li;
 }
 
-// abaixo comentado pro lint nao chorar
 function emptyCart() {
   const clearButton = document.querySelector('.empty-cart');
   clearButton.addEventListener('click', () => {
-    const cart = document.querySelector('.cart__items');
     cart.innerHTML = '';
-    console.log('cliquei');
+    printCartTotal();
   });
 } // ref#1
 emptyCart();
@@ -81,8 +97,8 @@ function sendToCart() {
         salePrice: fetchedItem.price,
       };
       const elementItem = createCartItemElement(objItemToCart);
-      const cartItself = document.querySelector('.cart__items');
-      cartItself.appendChild(elementItem);
+      cart.appendChild(elementItem);
+      printCartTotal();
     });
   });
 }
@@ -90,6 +106,7 @@ function sendToCart() {
 window.onload = async () => {
   await printProds();
   sendToCart();
+  printCartTotal();
 };
 
 // :: REFERÊNCIAS UTILIZADAS ::
@@ -101,7 +118,8 @@ window.onload = async () => {
 // . . . e não por ordem de leitura ou execução.
 // .
 // . índice:
-// . . 1 - function emptyCart (requisito 6);
+// . . 1 - function emptyCart (requisito 6); // acabei voltando pro innerHTML = ''
+// . . 2 - function printCartTotal (requisito 5);
 // .
 // .
 // :: Lista de Referências:
@@ -112,3 +130,11 @@ window.onload = async () => {
 // . . . Seguem os links:
 // . . . https://developer.mozilla.org/pt-BR/docs/Web/API/Node/removeChild
 // . . . https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Statements/while
+// .
+// . 2 - solução para filtrar o valor unitário da string que forma o item adicionado
+// . . . ao carrinho (uso do .substring e .indexOf) foi verificado ao pesquisar por
+// . . . "selecionar parte de uma string javascript" no Google, que retornou uma
+// . . . página da DevMedia onde havia um exemplo que [quase] satisfez a necessidade,
+// . . . precisando apenas acrescentar o parâmetro final.
+// . . . Segue o link:
+// . . . https://www.devmedia.com.br/javascript-substring-selecionando-parte-de-uma-string/39232
