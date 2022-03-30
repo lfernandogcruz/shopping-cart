@@ -40,12 +40,9 @@ function printCartTotal() {
   });
   const priceDiv = document.querySelector('.total-price');
   console.log(arrPrices);
-  if (arrPrices.length > 0) {
-    const sumPrices = arrPrices.reduce((a, b) => a + b, 0);
-    priceDiv.innerHTML = `Total do carrinho: R$ ${sumPrices}`;
-    console.log(sumPrices);
-  }
-  priceDiv.innerHTML = 'Total do carrinho: CARRINHO VAZIO!';
+  const sumPrices = arrPrices.reduce((a, b) => a + b, 0);
+  priceDiv.innerHTML = sumPrices;
+  console.log(sumPrices);
 } // ref#2
 
 function cartItemClickListener(event) {
