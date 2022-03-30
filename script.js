@@ -30,11 +30,14 @@ function getSkuFromProductItem(item) {
 
 const cart = document.querySelector('.cart__items');
 
+// soma os valores dos produtos no carrinho
 function printCartTotal() {
   const cartElements = cart.childNodes;
+  // console.log(cartElements);
   const arrPrices = [];
   cartElements.forEach((elElCart) => {
     const elElEl = elElCart.innerHTML;
+    // console.log(typeof elElEl, elElEl);
     const priceElement = elElEl.substring(elElEl.indexOf('$') + 1, elElEl.length);
     arrPrices.push(Number(priceElement));
   });
@@ -45,9 +48,12 @@ function printCartTotal() {
   // console.log(sumPrices);
 } // ref#2
 
+// implementa a funcao 'clique para retirar' nos itens do cart
 function cartItemClickListener(event) {
   // coloque seu código aqui
+  console.log('abuble');
   event.target.remove();
+  saveCartItems(cart.innerHTML);
   printCartTotal();
 }
 
@@ -56,18 +62,25 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
+  console.log(li);
   return li;
 }
 
+// esvazia o carrinho
+// add on: atualiza o localStorage
+// . . . . atualiza o valor do carrinho
 function emptyCart() {
   const clearButton = document.querySelector('.empty-cart');
   clearButton.addEventListener('click', () => {
-    cart.innerHTML = '';
+    const itemsInCart = document.querySelectorAll('.cart__item');
+    itemsInCart.forEach((item) => item.remove());
     printCartTotal();
+    saveCartItems(cart.innerHTML);
   });
 } // ref#1
 emptyCart();
 
+// exibe produtos na tela
 async function printProds() {
   const prodCanvas = document.querySelector('.items');
   const prodObjs = await fetchProducts();
@@ -81,6 +94,9 @@ async function printProds() {
   });
 }
 
+// monta o obj a ser enviado a funcao que exibe o cart
+// . add on: atualiza localStorage
+// . . . . . soma os valores dos produtos
 function sendToCart() {
   const buttons = document.querySelectorAll('.item__add');
   buttons.forEach((addButton) => {
@@ -95,14 +111,26 @@ function sendToCart() {
       };
       const elementItem = createCartItemElement(objItemToCart);
       cart.appendChild(elementItem);
+      saveCartItems(cart.innerHTML);
       printCartTotal();
     });
+  });
+}
+
+// recupera o localStorage
+function riseFromYourGrave() {
+  cart.innerHTML = getSavedCartItems();
+  const eachItem = cart.childNodes;
+  eachItem.forEach((itm) => {
+    console.log(itm);
+    itm.addEventListener('click', cartItemClickListener);
   });
 }
 
 window.onload = async () => {
   await printProds();
   sendToCart();
+  riseFromYourGrave();
   printCartTotal();
 };
 
