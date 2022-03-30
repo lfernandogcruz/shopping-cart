@@ -25,34 +25,35 @@ function createProductItemElement({ sku, name, image }) {
 }
 
 // abaixo comentado pro lint nao chorar
-// function getSkuFromProductItem(item) {
-//   return item.querySelector('span.item__sku').innerText;
-// }
+function getSkuFromProductItem(item) {
+  return item.querySelector('span.item__sku').innerText;
+}
 
 // abaixo comentado pro lint nao chorar
-// function cartItemClickListener(event) {
-//   // coloque seu código aqui
-// }
+function cartItemClickListener(event) {
+  // coloque seu código aqui
+  event.target.remove();
+}
 
 // abaixo comentado pro lint nao chorar
-// function createCartItemElement({ sku, name, salePrice }) {
-//   const li = document.createElement('li');
-//   li.className = 'cart__item';
-//   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
-//   li.addEventListener('click', cartItemClickListener);
-//   return li;
-// }
+function createCartItemElement({ sku, name, salePrice }) {
+  const li = document.createElement('li');
+  li.className = 'cart__item';
+  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.addEventListener('click', cartItemClickListener);
+  return li;
+}
 
 // abaixo comentado pro lint nao chorar
-// function emptyCart(event) {
-//   const clearButton = document.querySelector('.empty-cart');
-//   clearButton.addEventListener('click', () => {
-//     const cart = document.querySelector('.cart__items');
-//     while (cart.firstChild) {
-//       cart.removeChild(cart.firstChild);
-//     }
-//   }); 
-// } // ref#1
+function emptyCart() {
+  const clearButton = document.querySelector('.empty-cart');
+  clearButton.addEventListener('click', () => {
+    const cart = document.querySelector('.cart__items');
+    cart.innerHTML = '';
+    console.log('cliquei');
+  });
+} // ref#1
+emptyCart();
 
 async function printProds() {
   const prodCanvas = document.querySelector('.items');
@@ -66,9 +67,30 @@ async function printProds() {
     prodCanvas.appendChild(createProductItemElement(prodsToPrint));
   });
 }
-printProds();
 
-window.onload = () => {};
+function sendToCart() {
+  const buttons = document.querySelectorAll('.item__add');
+  buttons.forEach((addButton) => {
+    addButton.addEventListener('click', async (event) => {
+      const parentSection = event.target.parentElement;
+      const clickedId = getSkuFromProductItem(parentSection);
+      const fetchedItem = await fetchItem(clickedId);
+      const objItemToCart = {
+        sku: fetchedItem.id,
+        name: fetchedItem.title,
+        salePrice: fetchedItem.price,
+      };
+      const elementItem = createCartItemElement(objItemToCart);
+      const cartItself = document.querySelector('.cart__items');
+      cartItself.appendChild(elementItem);
+    });
+  });
+}
+
+window.onload = async () => {
+  await printProds();
+  sendToCart();
+};
 
 // :: REFERÊNCIAS UTILIZADAS ::
 // .
