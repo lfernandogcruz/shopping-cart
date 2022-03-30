@@ -39,10 +39,10 @@ function printCartTotal() {
     arrPrices.push(Number(priceElement));
   });
   const priceDiv = document.querySelector('.total-price');
-  console.log(arrPrices);
+  // console.log(arrPrices);
   const sumPrices = arrPrices.reduce((a, b) => a + b, 0);
   priceDiv.innerHTML = sumPrices;
-  console.log(sumPrices);
+  // console.log(sumPrices);
 } // ref#2
 
 function cartItemClickListener(event) {
