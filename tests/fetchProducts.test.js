@@ -34,17 +34,19 @@ describe('1 - Teste a função fecthProducts', () => {
     // console.log(testemos);
     expect(testemos).toEqual(computadorSearch.results);
   }); // a fc retorna o ".results" da API, entao comparei com idem do mock.
-  
+
   // 6.5
   // Teste se, ao chamar a função fetchProducts sem argumento, retorna um erro com
   // a mensagem: You must provide an url. Dica: Lembre-se de usar o
   // new Error('mensagem esperada aqui') para comparar com o objeto retornado da API.
-  // it('Ao chamar fetchProducts() sem argumento, erro: You must provide an url', async () => {
-    // const failResponse = await fetchProducts();
-    // console.log(failResponse);
-    // expect(failResponse).toEqual(new Error('You must provide an url'));
-  // });
-  //
+  it('Ao chamar fetchProducts() sem argumento, erro: You must provide an url', async () => {
+    try {
+      await fetchProducts();
+    } catch (error) {
+      expect(error.message).toBe('You must provide an url');
+    }
+  });
+
   fail('Teste vazio');
 });
 

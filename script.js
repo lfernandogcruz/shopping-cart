@@ -19,7 +19,10 @@ function createProductItemElement({ sku, name, image }) {
   section.appendChild(createCustomElement('span', 'item__sku', sku));
   section.appendChild(createCustomElement('span', 'item__title', name));
   section.appendChild(createProductImageElement(image));
-  section.appendChild(createCustomElement('button', 'item__add', 'Adicionar ao carrinho!'));
+  const a = 'button';
+  const b = 'item__add';
+  const c = 'Adicionar ao carrinho!';
+  section.appendChild(createCustomElement(a, b, c));
 
   return section;
 }
@@ -33,25 +36,20 @@ const cart = document.querySelector('.cart__items');
 // soma os valores dos produtos no carrinho
 function printCartTotal() {
   const cartElements = cart.childNodes;
-  // console.log(cartElements);
   const arrPrices = [];
   cartElements.forEach((elElCart) => {
     const elElEl = elElCart.innerHTML;
-    // console.log(typeof elElEl, elElEl);
     const priceElement = elElEl.substring(elElEl.indexOf('$') + 1, elElEl.length);
     arrPrices.push(Number(priceElement));
   });
   const priceDiv = document.querySelector('.total-price');
-  // console.log(arrPrices);
   const sumPrices = arrPrices.reduce((a, b) => a + b, 0);
   priceDiv.innerHTML = sumPrices;
-  // console.log(sumPrices);
 } // ref#2
 
 // implementa a funcao 'clique para retirar' nos itens do cart
 function cartItemClickListener(event) {
   // coloque seu código aqui
-  console.log('abuble');
   event.target.remove();
   saveCartItems(cart.innerHTML);
   printCartTotal();
@@ -62,7 +60,6 @@ function createCartItemElement({ sku, name, salePrice }) {
   li.className = 'cart__item';
   li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
   li.addEventListener('click', cartItemClickListener);
-  console.log(li);
   return li;
 }
 
@@ -83,7 +80,11 @@ emptyCart();
 // exibe produtos na tela
 async function printProds() {
   const prodCanvas = document.querySelector('.items');
-  const prodObjs = await fetchProducts();
+  const loading = createCustomElement('span', 'loading', 'carregando...');
+  prodCanvas.appendChild(loading);
+  const prodObjs = await fetchProducts('computador');
+  const loadingElement = document.querySelector('.loading');
+  loadingElement.remove();
   prodObjs.forEach((elProduct) => {
     const prodsToPrint = {
       sku: elProduct.id,
@@ -122,7 +123,6 @@ function riseFromYourGrave() {
   cart.innerHTML = getSavedCartItems();
   const eachItem = cart.childNodes;
   eachItem.forEach((itm) => {
-    console.log(itm);
     itm.addEventListener('click', cartItemClickListener);
   });
 }
